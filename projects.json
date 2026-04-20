@@ -3,7 +3,7 @@
     "title": "Project One",
     "description": "Short sentence or two describing what this project does and what's interesting about it. This is the placeholder copy — replace it with your own summary.",
     "tech": ["HTML5", "CSS3", "JavaScript"],
-    "github": "https://github.com/your-username/project-one",
+    "github": "https://github.com/gauravsharma-github/WebDevProjects/tree/1e13c2a8a857b61839bfe7de5d6bf2de34d79996/expanding-cards",
     "demo": "https://your-username.github.io/project-one/",
     "year": 2026,
     "status": "live"
