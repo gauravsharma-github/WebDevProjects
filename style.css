@@ -1,0 +1,178 @@
+/* ============================================================================
+   EXPANDING CARDS - STYLESHEET
+   ============================================================================
+   Purpose:
+     Defines the layout and the expand/collapse animation for the panels.
+
+   Key ideas used:
+     1. CSS Flexbox with fractional `flex` values drives the expand effect.
+        The active panel gets a large flex value (5) while others keep a small value (0.5). Because flex distributes *remaining* space proportionally, this creates the 10x ratio that looks like an expansion without actually animating width/height (which triggers expensive layout on every frame in older approaches).
+     2. A CSS `transition` on `all` smooths the flex change so the expansion appears animated rather than instant.
+     3. The label <h3> fades in *after* the expansion completes via a delayed opacity transition — a small but important UX touch that prevents text from appearing in a too-narrow panel mid-animation.
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   FONT IMPORT
+   ----------------------------------------------------------------------------
+   Loads the "Muli" font from Google Fonts.
+   - `display=swap` tells the browser to render text in a fallback font first and swap to Muli once it loads. This avoids the "invisible text" flash (FOIT) and improves perceived performance.
+   Note: @import inside CSS blocks parallel downloads. For a production site, prefer <link rel="preconnect"> + <link rel="stylesheet"> in HTML <head> for better performance.
+---------------------------------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css?family=Muli&display=swap");
+
+/* ----------------------------------------------------------------------------
+   GLOBAL RESET
+   ----------------------------------------------------------------------------
+   Applies `border-box` to every element so that `width` and `height` include padding and border. Without this, adding padding would *increase* the
+   rendered size and break flex calculations. This is the single most common "reset" used in modern CSS.
+---------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+/* ----------------------------------------------------------------------------
+   BODY — full-viewport centered layout
+   ----------------------------------------------------------------------------
+   Turns <body> itself into a flex container so the .container div is
+   centered both horizontally and vertically without needing any wrapper
+   tricks like absolute positioning + transform.
+
+   - height: 100vh       -> body fills the viewport vertically
+   - overflow: hidden    -> prevents accidental scroll during the animation
+                            (flex transitions can briefly overflow the viewport)
+   - margin: 0           -> removes the default ~8px body margin that would
+                            otherwise cause a horizontal scrollbar
+---------------------------------------------------------------------------- */
+body {
+  font-family: "Muli", sans-serif;
+  display: flex;
+  align-items: center; /* vertical centering of .container */
+  justify-content: center; /* horizontal centering of .container */
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   .container — the flex row that holds all panels
+   ----------------------------------------------------------------------------
+   - display: flex  -> lays the panels out horizontally by default (row).
+   - width: 90vw    -> leaves a 5% gutter on each side so panels don't
+                       touch the viewport edge, giving the layout breathing room.
+---------------------------------------------------------------------------- */
+.container {
+  display: flex;
+  width: 90vw;
+}
+
+/* ----------------------------------------------------------------------------
+   .panel — the base (collapsed) state
+   ----------------------------------------------------------------------------
+   Each panel is a flex item with a *small* flex value so all inactive panels
+   share space roughly equally. The background image supplied via inline style
+   is rendered with `cover` + `center` so the important part of each photo
+   stays visible regardless of the panel's current width.
+
+   Flex value reasoning:
+     - flex: 0.5 for inactive + flex: 5 for active => active is 10x the others.
+     - With 4 inactive (0.5 each = 2.0) + 1 active (5.0) = total 7.0
+       => active panel occupies 5/7 ≈ 71% of the row's width.
+     - This ratio feels dramatic enough to read as "expansion" without
+       completely hiding the other panels.
+
+   Transition:
+     - `all 700ms ease-in` animates every animatable property — here, the
+       key one is `flex-grow`. 700ms is slow enough to feel deliberate but
+       not sluggish. ease-in starts slow and speeds up, giving a "settling"
+       feel at the end.
+     - NOTE: `-webkit-transition` is a legacy prefix for old Safari/Chrome.
+       Modern browsers don't need it; the unprefixed `transition` should be
+       added too for full compatibility. (Kept as-is here.)
+---------------------------------------------------------------------------- */
+.panel {
+  background-size: cover; /* fill panel, cropping overflow */
+  background-position: center; /* keep photo's focal area centered */
+  background-repeat: no-repeat; /* defensive: prevent tiled repeat if image is small */
+  height: 80vh; /* 80% of viewport height -> leaves visual padding */
+  border-radius: 50px; /* soft, modern pill-shaped corners */
+  color: #fff; /* white text reads against photographic backgrounds */
+  cursor: pointer; /* signals interactivity — key for UX affordance */
+  flex: 0.5; /* collapsed-state size (see reasoning above) */
+  margin: 10px; /* horizontal gap between panels */
+  position: relative; /* establishes a positioning context for the <h3> */
+  -webkit-transition: all 700ms ease-in; /* smooth expand/collapse animation */
+}
+
+/* ----------------------------------------------------------------------------
+   .panel h3 — the label overlay
+   ----------------------------------------------------------------------------
+   Positioned absolutely within the panel's bottom-left corner so it sits
+   *on top* of the image rather than pushing content around. Hidden by
+   default (opacity: 0) and revealed only for the active panel — this
+   keeps the inactive panels visually clean.
+---------------------------------------------------------------------------- */
+.panel h3 {
+  font-size: 24px;
+  position: absolute; /* relative to .panel because .panel has position: relative */
+  bottom: 20px;
+  left: 20px;
+  margin: 0; /* kill default h3 margin that would misalign the label */
+  opacity: 0; /* invisible until the panel becomes active */
+}
+
+/* ----------------------------------------------------------------------------
+   .panel.active — the expanded state
+   ----------------------------------------------------------------------------
+   When JS adds the `active` class, `flex: 5` overrides the base `flex: 0.5`
+   and (thanks to the transition defined on .panel) the panel smoothly grows
+   to dominate the row.
+---------------------------------------------------------------------------- */
+.panel.active {
+  flex: 5;
+}
+
+/* ----------------------------------------------------------------------------
+   .panel.active h3 — delayed label fade-in
+   ----------------------------------------------------------------------------
+   The panel itself takes 700ms to expand. If the label faded in immediately,
+   it would appear before there's room to display it cleanly. The 0.4s
+   transition-delay waits until most of the expansion is done, *then* fades
+   the label in over 0.3s. Result: label appears only when the panel is
+   wide enough to host it.
+
+   Timing breakdown:
+     0ms    -> click, class added, panel starts expanding
+     ~400ms -> label begins fading in
+     ~700ms -> label fully visible, panel fully expanded
+---------------------------------------------------------------------------- */
+.panel.active h3 {
+  opacity: 1;
+  transition: opacity 0.3s ease-in 0.4s;
+}
+
+/* ----------------------------------------------------------------------------
+   RESPONSIVE — narrow screens (mobile portrait)
+   ----------------------------------------------------------------------------
+   On phones, 5 panels in a row leaves each one too narrow to be usable.
+   Strategy:
+     1. Expand .container to 100vw (use every pixel of screen width).
+     2. Hide the 4th and 5th panels entirely so the remaining 3 get more
+        room. This is a pragmatic choice — not ideal for content parity,
+        but common for hero/visual components where all panels show similar
+        types of content.
+
+   Alternative approaches to consider for production:
+     - Stack panels vertically (flex-direction: column) on mobile.
+     - Convert to a horizontally-scrollable carousel.
+     - Show all 5 but reduce border-radius / height to fit.
+---------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .container {
+    width: 100vw;
+  }
+
+  .panel:nth-of-type(4),
+  .panel:nth-of-type(5) {
+    display: none;
+  }
+}
