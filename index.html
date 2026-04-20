@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A catalog of web development projects — source code and live demos."
+    />
+    <title>Project Index — Gaurav</title>
+
+    <!-- Fonts: editorial pairing — JetBrains Mono (display/meta) + Fraunces (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- Decorative grid overlay -->
+    <div class="grid-bg" aria-hidden="true"></div>
+
+    <!-- ====================================================================
+         HEADER: identity + meta
+    ==================================================================== -->
+    <header class="masthead">
+      <div class="masthead__row">
+        <span class="masthead__label">Vol. 01</span>
+        <span class="masthead__label masthead__label--right" id="today"></span>
+      </div>
+
+      <h1 class="title">
+        Project<span class="title__slash">/</span>Index
+      </h1>
+
+      <div class="masthead__row masthead__row--meta">
+        <span class="masthead__label">A catalog of web development work</span>
+        <span class="masthead__label masthead__label--right">
+          <span id="project-count">—</span> entries
+        </span>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         INTRO: short lead paragraph
+    ==================================================================== -->
+    <section class="lead">
+      <p>
+        A running index of things I've built on the web — each entry links
+        to its source and a live demo where available. Filed chronologically,
+        most recent first.
+      </p>
+    </section>
+
+    <!-- ====================================================================
+         FILTERS
+    ==================================================================== -->
+    <section class="filters" aria-label="Filter projects">
+      <button class="filter is-active" data-filter="all">All</button>
+      <button class="filter" data-filter="live">Live</button>
+      <button class="filter" data-filter="wip">In Progress</button>
+      <button class="filter" data-filter="archived">Archived</button>
+    </section>
+
+    <!-- ====================================================================
+         PROJECT LIST: populated from projects.js
+    ==================================================================== -->
+    <main class="catalog" id="catalog">
+      <!-- JS injects <article class="entry"> items here -->
+    </main>
+
+    <!-- Shown when filter yields no matches -->
+    <p class="empty-state" id="empty-state" hidden>
+      No entries match this filter.
+    </p>
+
+    <!-- ====================================================================
+         FOOTER
+    ==================================================================== -->
+    <footer class="colophon">
+      <div class="colophon__row">
+        <span>Set in JetBrains Mono &amp; Fraunces</span>
+        <span>© <span id="year"></span></span>
+      </div>
+    </footer>
+
+    <script src="projects.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
