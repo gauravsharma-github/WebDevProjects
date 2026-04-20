@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Project One",
+    "description": "Short sentence or two describing what this project does and what's interesting about it. This is the placeholder copy — replace it with your own summary.",
+    "tech": ["HTML5", "CSS3", "JavaScript"],
+    "github": "https://github.com/your-username/project-one",
+    "demo": "https://your-username.github.io/project-one/",
+    "year": 2026,
+    "status": "live"
+  },
+  {
+    "title": "Project Two",
+    "description": "Another placeholder entry. Duplicate this block in projects.json to add as many projects as you want — the page adapts automatically.",
+    "tech": ["React", "TypeScript", "Tailwind"],
+    "github": "https://github.com/your-username/project-two",
+    "demo": "#",
+    "year": 2026,
+    "status": "wip"
+  },
+  {
+    "title": "Project Three",
+    "description": "Use status 'archived' for older projects you still want to show but aren't actively maintaining.",
+    "tech": ["Node.js", "Express", "MongoDB"],
+    "github": "https://github.com/your-username/project-three",
+    "demo": "#",
+    "year": 2025,
+    "status": "archived"
+  },
+  {
+    "title": "Project Four",
+    "description": "Placeholder — replace with a real project. Tech tags, year, and status all show up in the listing and feed the filter/search.",
+    "tech": ["Python", "Django", "PostgreSQL"],
+    "github": "https://github.com/your-username/project-four",
+    "demo": "https://demo-url.com",
+    "year": 2025,
+    "status": "live"
+  },
+  {
+    "title": "Project Five",
+    "description": "Use '#' for any link that isn't ready yet — it'll render as a muted, non-clickable placeholder instead of a broken link.",
+    "tech": ["Vue.js", "Firebase"],
+    "github": "#",
+    "demo": "#",
+    "year": 2024,
+    "status": "archived"
+  }
+]
