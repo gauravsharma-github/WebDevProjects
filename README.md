@@ -1,6 +1,6 @@
 # Project Index
 
-A single-page portfolio listing your web dev projects with links to source code and live demos. Editorial / technical-journal aesthetic — warm paper tones, monospace meta, serif headings, no frameworks, no build step.
+A single-page portfolio listing your web dev projects with links to source code and live demos. Editorial / technical-journal aesthetic — warm paper tones, monospace meta, serif headings, no frameworks, no build step...
 
 Projects are driven by a `projects.json` file that you edit directly. The page supports **live search** (across title, description, and tech tags) and **status filters** (All / Live / In Progress / Archived).
 
